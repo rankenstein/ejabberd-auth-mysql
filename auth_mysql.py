@@ -77,7 +77,7 @@ def ejabberd_in():
 	logging.debug("trying to read 2 bytes from ejabberd:")
 
 	input_length = sys.stdin.read(2)
-	
+
 	if len(input_length) is not 2:
 		logging.debug("ejabberd sent us wrong things!")
 		raise EjabberdInputError('Wrong input from ejabberd!')
@@ -95,11 +95,11 @@ def ejabberd_in():
 
 def ejabberd_out(bool):
 	logging.debug("Ejabberd gets: %s" % bool)
-	
+
 	token = genanswer(bool)
-	
+
 	logging.debug("sent bytes: %#x %#x %#x %#x" % (ord(token[0]), ord(token[1]), ord(token[2]), ord(token[3])))
-	
+
 	sys.stdout.write(token)
 	sys.stdout.flush()
 
@@ -154,7 +154,7 @@ def auth(user, host, password):
 def setpass(user, host, password):
 	if db_query_setpass == "":
 		return False
-	
+
 	database.ping(True)
 	with database as dbcur:
 		dbcur.execute(db_query_setpass, {"user": user, "host": host, "password": password_hash(password)})
@@ -168,11 +168,11 @@ def setpass(user, host, password):
 def tryregister(user, host, password):
 	if db_query_register == "":
 		return False
-	
+
 	if isuser(user, host):
 		logging.info("Could not register user %s@%s as it already exists." % (user, host))
 		return False
-	
+
 	database.ping(True)
 	with database as dbcur:
 		dbcur.execute(db_query_register, {"user": user, "host": host, "password": password_hash(password)})
@@ -196,7 +196,7 @@ def removeuser(user, host):
 def removeuser3(user, host, password):
 	if db_query_unregister == "":
 		return False
-	
+
 	return auth(user, host, password) and removeuser(user, host)
 
 
@@ -208,17 +208,17 @@ exitcode=0
 
 while True:
 	logging.debug("start of infinite loop")
-	
-	try: 
+
+	try:
 		ejab_request = ejabberd_in()
 	except EOFError:
 		break
 	except Exception as e:
 		logging.exception("Exception occured while reading stdin")
 		raise
-	
+
 	logging.debug('operation: %s' % (":".join(ejab_request)))
-	
+
 	op_result = False
 	try:
 		if ejab_request[0] == "auth":
@@ -235,10 +235,10 @@ while True:
 			op_result = removeuser3(ejab_request[1], ejab_request[2], ejab_request[3])
 	except Exception:
 		logging.exception("Exception occured")
-		
+
 	ejabberd_out(op_result)
 	logging.debug("successful" if op_result else "unsuccessful")
-	
+
 logging.debug("end of infinite loop")
 logging.info('extauth script terminating')
 database.close()
