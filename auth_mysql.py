@@ -53,7 +53,7 @@ MySQLdb.paramstyle = 'pyformat'
 try:
 	database=MySQLdb.connect(db_host, db_user, db_pass, db_name)
 except:
-	logging.debug("Unable to initialize database, check settings!")
+	logging.error("Unable to initialize database, check settings!")
 	time.sleep(10)
 	sys.exit(1)
 
