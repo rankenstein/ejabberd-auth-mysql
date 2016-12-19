@@ -40,7 +40,7 @@ db_hashalg=os.getenv('AUTH_MYSQL_HASHALG', '')
 #Setup
 ########################################################################
 
-import sys, logging, struct, hashlib, MySQLdb, crypt, random, atexit
+import sys, logging, struct, hashlib, MySQLdb, crypt, random, atexit, time
 
 sys.stderr = open('/var/log/ejabberd/extauth_err.log', 'a')
 logging.basicConfig(level=logging.INFO,
@@ -54,6 +54,7 @@ try:
 	database=MySQLdb.connect(db_host, db_user, db_pass, db_name)
 except:
 	logging.debug("Unable to initialize database, check settings!")
+	time.sleep(10)
 	sys.exit(1)
 
 @atexit.register
