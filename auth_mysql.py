@@ -88,7 +88,7 @@ def ejabberd_in():
 	(size,) = struct.unpack('>h', input_length)
 	logging.debug('size of data: %i'%size)
 
-	income=sys.stdin.read(size).split(':')
+	income=sys.stdin.read(size).split(':', 4)
 	logging.debug("incoming data: %s"%income)
 
 	return income
