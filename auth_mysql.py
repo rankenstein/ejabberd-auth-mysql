@@ -132,7 +132,7 @@ def get_password(user, host):
 	with database as dbcur:
 		dbcur.execute(db_query_getpass, {"user": user, "host": host})
 		data = dbcur.fetchone()
-		return data[0] if data != None else None;
+		return data[0] if data != None else None
 
 
 def isuser(user, host):
